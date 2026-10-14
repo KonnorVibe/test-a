@@ -9,7 +9,7 @@ Aya ist keine öffentliche Website, sondern eine private Zyklus-App (PWA). Der S
 | Phase | Name | Für Aya angepasst | Status | Datum |
 |---|---|---|---|---|
 | 0 | Einrichten | Repo, impeccable, Playwright, Statusdatei | ✅ | 2026-10-14 |
-| 1 | Fundament | Name, neutrales Icon, `PRODUCT.md` | 🔄 | 2026-10-14 |
+| 1 | Fundament | Name, neutrales Icon, `PRODUCT.md` | ✅ | 2026-10-14 |
 | 2 | Recherche | nur Design-Vorbilder, keine Keywords | ⬜ | |
 | 3 | Texte | alle Oberflächentexte für `src/i18n/de.ts` | ⬜ | |
 | 4 | Design-Richtung | Farbwelt, Zyklusring, Stil | ⬜ | |
@@ -52,11 +52,11 @@ Aya ist keine öffentliche Website, sondern eine private Zyklus-App (PWA). Der S
 - 2026-10-14: Ansprache du.
 - 2026-10-14: Flo-Altdaten sollen importiert werden, Format offen.
 - 2026-10-14: Icon Runde 1: Konzepte 2 (Spiegel) und 4 (Köper) gewählt. Runde 2 in `logo/entwuerfe/runde-2.html`.
+- 2026-10-14: Icon final: Konzept 2 „Spiegel“ aus Runde 1 (nicht die Varianten aus Runde 2). Logo-Familie einfarbig in `logo/final/`, Einfärbung in Phase 4.
 - 2026-10-14: Vorbilder für Phase 2: emmaportner.com, tigris.lorolabs.ai/#variants, levinkettler.com
 
 ## Offene Fragen an die Person
 
-- Icon: Auswahl aus Runde 2
 - Flo-Export: Liegt eine echte Exportdatei vor, mit der der Import getestet werden kann?
 
 ## Update-Ablauf nach dem Livegang
