@@ -10,7 +10,7 @@ Aya ist keine öffentliche Website, sondern eine private Zyklus-App (PWA). Der S
 |---|---|---|---|---|
 | 0 | Einrichten | Repo, impeccable, Playwright, Statusdatei | ✅ | 2026-10-14 |
 | 1 | Fundament | Name, neutrales Icon, `PRODUCT.md` | ✅ | 2026-10-14 |
-| 2 | Recherche | nur Design-Vorbilder, keine Keywords | ⬜ | |
+| 2 | Recherche | nur Design-Vorbilder, keine Keywords | 🔄 | 2026-10-14 |
 | 3 | Texte | alle Oberflächentexte für `src/i18n/de.ts` | ⬜ | |
 | 4 | Design-Richtung | Farbwelt, Zyklusring, Stil | ⬜ | |
 | 5 | Bauen | Reihenfolge aus `docs/app-plan.md` Abschnitt 11 | ⬜ | |
@@ -57,6 +57,7 @@ Aya ist keine öffentliche Website, sondern eine private Zyklus-App (PWA). Der S
 
 ## Offene Fragen an die Person
 
+- Phase 2 blockiert: Die Netzwerk-Regeln der Cloud-Umgebung sperren emmaportner.com, tigris.lorolabs.ai und levinkettler.com. Optionen: Domains in den Umgebungs-Einstellungen freigeben, Screenshots hochladen oder in Worten beschreiben, was gefällt.
 - Flo-Export: Liegt eine echte Exportdatei vor, mit der der Import getestet werden kann?
 
 ## Update-Ablauf nach dem Livegang
