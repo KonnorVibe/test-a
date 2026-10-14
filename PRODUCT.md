@@ -2,8 +2,6 @@
 
 <!-- impeccable:product-schema 1 -->
 
-> Entwurf aus `docs/app-plan.md`. Punkte mit **[offen]** warten auf Bestätigung.
-
 ## Platform
 
 web
@@ -16,7 +14,7 @@ Vorgegeben im Plan: Vite, React, TypeScript (strict), vite-plugin-pwa, IndexedDB
 
 ## Users
 
-Eine einzelne Nutzerin, die ihren Zyklus auf dem iPhone verfolgt. **[offen: Bist du das selbst oder baust du die App für jemand anderen?]**
+Frauen, die ihren Zyklus auf dem iPhone verfolgen, zuerst die Freundin des Entwicklers. Jede Installation ist für genau eine Person auf ihrem eigenen Gerät. Die Nutzerinnen sind keine Technikerinnen, die Installation und das Onboarding müssen ohne Hilfe klappen, und es gibt keinen Support-Kanal.
 
 Situation: kurze Einträge im Alltag (Ziel unter 10 Sekunden), gelegentlich ein Blick auf Vorhersage und Muster, ab und zu eine Übersicht für einen Arzttermin. Kennt Flo und erwartet ähnliche Bedienqualität.
 
@@ -47,7 +45,7 @@ Kein Server, kein Account, keine Cloud, kein Tracking. Alle Daten verschlüsselt
 ## Brand Commitments
 
 - Name: **Aya**
-- Sprache der Oberfläche: Deutsch. Ansprache: du **[offen: bestätigen]**
+- Sprache der Oberfläche: Deutsch. Ansprache: du
 - Charakter: warm, ruhig, erwachsen, kein Kitsch
 - App-Icon und Splashscreen diskret, kein erkennbares Perioden-Symbol auf dem Homescreen
 - Farbrollen aus dem Plan: Periode gedecktes Rosé/Rot, fruchtbares Fenster Türkis, Eisprung kräftiger Akzent, Lutealphase sanftes Violett (genaue Werte folgen in Phase 4)
@@ -55,7 +53,8 @@ Kein Server, kein Account, keine Cloud, kein Tracking. Alle Daten verschlüsselt
 ## Evidence on Hand
 
 - Wissenschaftliche Quellen der Vorhersage-Engine (siehe Plan Abschnitt 6.1)
-- Keine echten Zyklusdaten zum Testen. Tests nutzen synthetische Datensätze. **[offen: Gibt es Altdaten, etwa einen Flo-Export, die später importiert werden sollen?]**
+- Keine echten Zyklusdaten zum Testen. Tests nutzen synthetische Datensätze.
+- Altdaten aus Flo sollen importiert werden. Ein echter Export liegt noch nicht vor, das Format ist nicht garantiert. Der Importer bleibt deshalb flexibel mit Spaltenzuordnung (Plan Abschnitt 8).
 - Keine Nutzerstimmen, keine Vergleichszahlen gegen Flo außer dem im Plan genannten Orientierungswert. Nichts davon erfinden.
 
 ## Product Principles

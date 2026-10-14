@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aya Icon Runde 2</title>
+<style>
+  :root { --bg:#f4f1ec; --card:#fbfaf7; --ink:#2a2622; --muted:#7a716a; --tile-l:#f1ece5; --mark-l:#2a2622; --tile-d:#1d1a18; --mark-d:#efe9e1; --line:#e3ddd5; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#141210; --card:#1c1917; --ink:#ece6de; --muted:#9a9089; --line:#2c2825; } }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 -apple-system, system-ui, sans-serif; padding:24px 16px 64px; }
+  h1 { font-size:22px; margin:0 0 4px; } .lead { color:var(--muted); margin:0 0 24px; max-width:62ch; }
+  h3 { font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:28px 0 12px; }
+  .grid { display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(min(100%, 420px), 1fr)); }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; }
+  .card h2 { font-size:17px; margin:0; } .card p { margin:4px 0 12px; color:var(--muted); font-size:14px; }
+  .verdict { font-size:13px; border-left:3px solid var(--line); padding-left:8px; margin-bottom:12px; }
+  .row { display:flex; align-items:flex-end; gap:12px; flex-wrap:wrap; }
+  .tile { border-radius:22.37%; display:grid; place-items:center; flex:none; }
+  .tile svg { width:78%; height:78%; }
+  .l { background:var(--tile-l); color:var(--mark-l); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+  .d { background:var(--tile-d); color:var(--mark-d); }
+  .t96 { width:96px; height:96px; } .t60 { width:60px; height:60px; } .t32 { width:32px; height:32px; border-radius:7px; } .t16 { width:16px; height:16px; border-radius:3.5px; }
+  .mono { width:96px; height:96px; color:var(--ink); display:grid; place-items:center; } .mono svg { width:78%; height:78%; }
+  .lockup { display:flex; align-items:center; gap:8px; margin-top:12px; }
+  .lockup svg { width:36px; height:36px; } .lockup span { font-size:28px; font-weight:600; letter-spacing:-0.01em; }
+  .cap { font-size:11px; color:var(--muted); text-align:center; margin-top:2px; }
+  .cell { display:flex; flex-direction:column; align-items:center; }
+  .home { margin-top:28px; background:linear-gradient(160deg,#6d7f8f,#3c4a57); border-radius:24px; padding:20px; display:grid; grid-template-columns:repeat(4, 60px); gap:18px 22px; justify-content:center; max-width:420px; }
+  .home .app { display:flex; flex-direction:column; align-items:center; gap:4px; color:#fff; font-size:11px; }
+  .home .fake { width:60px; height:60px; border-radius:22.37%; background:rgba(255,255,255,.28); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- 2a: mirrored single-storey a around a shared stem -->
+  <symbol id="a" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"><circle cx="32" cy="50" r="14"/><circle cx="68" cy="50" r="14"/><path d="M50 32v36"/></g></symbol>
+  <!-- 2b: crescents facing inward around a dot -->
+  <symbol id="b" viewBox="0 0 100 100"><path fill="currentColor" d="M18 20 A32 32 0 0 1 18 80 A42 42 0 0 0 18 20Z M82 20 A32 32 0 0 0 82 80 A42 42 0 0 1 82 20Z"/><circle cx="50" cy="50" r="6" fill="currentColor"/></symbol>
+  <!-- 2c: two mirrored leaves under a dot -->
+  <symbol id="c" viewBox="0 0 100 100"><path fill="currentColor" d="M46 78 A40 40 0 0 1 24 32 A40 40 0 0 1 46 78Z M54 78 A40 40 0 0 0 76 32 A40 40 0 0 0 54 78Z"/><circle cx="50" cy="28" r="6" fill="currentColor"/></symbol>
+  <!-- 4a: bold twill, three bands with staggered breaks -->
+  <symbol id="d" viewBox="0 0 100 100"><g stroke="currentColor" stroke-width="13"><path d="M20 50 L31 39 M38 32 L50 20"/><path d="M20 80 L46 54 M54 46 L80 20"/><path d="M50 80 L62 68 M69 61 L80 50"/></g></symbol>
+  <!-- 4b: basket weave, two over two -->
+  <symbol id="e" viewBox="0 0 100 100"><g fill="currentColor">
+    <rect x="18" y="30" width="33" height="16"/><rect x="73" y="30" width="9" height="16"/>
+    <rect x="18" y="54" width="9" height="16"/><rect x="49" y="54" width="33" height="16"/>
+    <rect x="30" y="18" width="16" height="9"/><rect x="30" y="49" width="16" height="33"/>
+    <rect x="54" y="18" width="16" height="33"/><rect x="54" y="73" width="16" height="9"/>
+  </g></symbol>
+  <!-- 4c: twill inside a circle -->
+  <symbol id="f" viewBox="0 0 100 100"><defs><clipPath id="fc"><circle cx="50" cy="50" r="32"/></clipPath></defs><g clip-path="url(#fc)" stroke="currentColor" stroke-width="9" stroke-dasharray="20 7"><path d="M0 64 L64 0"/><path d="M0 82 L82 0" stroke-dashoffset="9"/><path d="M0 100 L100 0" stroke-dashoffset="18"/><path d="M18 100 L100 18" stroke-dashoffset="27"/><path d="M36 100 L100 36" stroke-dashoffset="36"/></g></symbol>
+</svg>
+
+<h1>Aya: App-Icon, Runde 2</h1>
+<p class="lead">Je drei Varianten von „Spiegel“ und „Köper“. Ziel bei Spiegel: weg vom Funk-Symbol. Ziel bei Köper: klar als Gewebe lesbar und auch bei 16 px noch eine Form. Unten zusätzlich ein Test auf einem Homescreen.</p>
+
+<h3>Spiegel</h3>
+<div class="grid" id="g1"></div>
+<h3>Köper</h3>
+<div class="grid" id="g2"></div>
+
+<h3>Auf dem Homescreen</h3>
+<div class="home" id="home"></div>
+
+<script>
+const spiegel = [
+  ["a","2a · Doppel-a","Ein kleines a und sein Spiegelbild teilen sich einen Strich. Liest sich vorwärts wie rückwärts, wie der Name.","Typografisch und bis 16 px klar. Ehrlich gesagt liest es sich aber stark als Brille oder Unendlich-Zeichen, und das a erkennt man erst auf den zweiten Blick."],
+  ["b","2b · Zugewandt","Die Bögen zeigen jetzt nach innen auf den Punkt.","Kein Funk-Symbol mehr, wirkt aber wie eine Sanduhr oder Taille. Schwer zu deuten."],
+  ["c","2c · Blätter","Zwei gespiegelte Blätter unter einem Punkt.","Organisch und freundlich, aber nah an Wellness- und Pflanzen-Logos. Erinnert auch an eine Figur."],
+];
+const koeper = [
+  ["d","4a · Köper kräftig","Drei breite diagonale Bänder mit versetzten Unterbrechungen, wie im echten Köpergewebe.","Meine Empfehlung. Viel klarer als Runde 1, eigenständig, nichts Themennahes. Bei 32 px gut, bei 16 px knapp, aber noch eine Form."],
+  ["e","4b · Flechtwerk","Zwei mal zwei Bänder, die abwechselnd über- und untereinander laufen.","Deutlich als Gewebe lesbar. Kritischer Punkt: von weitem nah am Rautezeichen # und am Slack-Logo."],
+  ["f","4c · Köper im Kreis","Köpermuster in einem Kreis, wie ein Stoffknopf.","Der Kreis gibt bei kleinen Größen eine klare Form. Bei 16 px verschwimmt das Muster zu einem grauen Punkt."],
+];
+const use = id => `<svg viewBox="0 0 100 100" aria-hidden="true"><use href="#${id}"/></svg>`;
+const card = ([id,title,meaning,verdict]) => `
+  <section class="card">
+    <h2>${title}</h2><p>${meaning}</p><div class="verdict">${verdict}</div>
+    <div class="row">
+      <div class="cell"><div class="tile l t96">${use(id)}</div><div class="cap">hell</div></div>
+      <div class="cell"><div class="tile d t96">${use(id)}</div><div class="cap">dunkel</div></div>
+      <div class="cell"><div class="mono">${use(id)}</div><div class="cap">einfarbig</div></div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <div class="cell"><div class="tile l t60">${use(id)}</div><div class="cap">60</div></div>
+      <div class="cell"><div class="tile d t60">${use(id)}</div><div class="cap">60</div></div>
+      <div class="cell"><div class="tile l t32">${use(id)}</div><div class="cap">32</div></div>
+      <div class="cell"><div class="tile d t32">${use(id)}</div><div class="cap">32</div></div>
+      <div class="cell"><div class="tile l t16">${use(id)}</div><div class="cap">16</div></div>
+      <div class="cell"><div class="tile d t16">${use(id)}</div><div class="cap">16</div></div>
+    </div>
+    <div class="lockup">${use(id)}<span>Aya</span></div>
+  </section>`;
+document.getElementById("g1").innerHTML = spiegel.map(card).join("");
+document.getElementById("g2").innerHTML = koeper.map(card).join("");
+const fake = n => Array.from({length:n}, () => `<div class="app"><div class="fake"></div>&nbsp;</div>`).join("");
+document.getElementById("home").innerHTML =
+  ["a","b","c","d","e","f"].map(id => `<div class="app"><div class="tile l t60">${use(id)}</div>Aya</div>`).join("") + fake(6);
+</script>
+</body>
+</html>
