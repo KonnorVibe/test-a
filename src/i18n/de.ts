@@ -2,11 +2,16 @@ import { diffDays, type ISODate } from '../engine/dates.ts';
 import type { Confidence, Prediction } from '../engine/prediction.ts';
 
 const dayMonth = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+const monthYear = new Intl.DateTimeFormat('de-DE', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const weekdayLong = new Intl.DateTimeFormat('de-DE', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 const toDate = (d: ISODate) => new Date(`${d}T00:00:00Z`);
 
 export function formatDayMonth(d: ISODate): string {
   return dayMonth.format(toDate(d));
+}
+
+export function formatMonthYear(year: number, month: number): string {
+  return monthYear.format(new Date(Date.UTC(year, month - 1, 1)));
 }
 
 export function formatLongDate(d: ISODate): string {
@@ -123,6 +128,33 @@ export const de = {
       long_periods: 'Deine Perioden dauerten zuletzt öfter länger als 8 Tage. Sprich bei Gelegenheit mit deiner Ärztin darüber.',
       high_variability: 'Deine Zykluslängen schwanken stark. Sprich bei Gelegenheit mit deiner Ärztin darüber.',
       absent_period: 'Deine letzte Periode liegt über 90 Tage zurück. Sprich mit deiner Ärztin darüber.',
+    },
+  },
+  calendar: {
+    title: 'Kalender',
+    prev: 'Vorheriger Monat',
+    next: 'Nächster Monat',
+    weekdays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+    edit: 'Periode nachtragen',
+    editDone: 'Fertig',
+    editHint: 'Tippe auf die Tage, an denen du deine Periode hattest. Nochmal tippen entfernt sie.',
+    toToday: 'Heute',
+    missed: (from: string, to: string, days: number) =>
+      `Zwischen ${from} und ${to} liegen ${days} Tage ohne Periode. Hast du hier vielleicht eine Periode nicht eingetragen?`,
+    missedAdd: 'Periode nachtragen',
+    missedKeep: 'Stimmt so',
+    legendPredicted: 'erwartete Periode',
+    legendEntry: 'Eintrag',
+    dayLabel: (date: string, parts: string[]) => [date, ...parts].join(', '),
+    states: {
+      logged: 'Periode',
+      spotting: 'Schmierblutung',
+      predicted: 'erwartete Periode',
+      peak: 'hohe Fruchtbarkeit',
+      high: 'fruchtbar',
+      ovulation: 'voraussichtlicher Eisprung',
+      entry: 'Eintrag vorhanden',
+      today: 'heute',
     },
   },
   theme: { label: 'Darstellung', system: 'System', light: 'Hell', dark: 'Dunkel' },

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { todayLocal } from '../engine/dates.ts';
 import { predict } from '../engine/prediction.ts';
+import { overridesFrom } from '../engine/types.ts';
 import { de } from '../i18n/de.ts';
 import { useApp } from '../state/store.ts';
 import { DayLogSheet } from './components/DayLogSheet.tsx';
@@ -8,6 +9,7 @@ import { TabBar, type TabId } from './components/TabBar.tsx';
 import { useAutoLock, usePrivacyShield, useTheme } from './hooks/useAppEnvironment.ts';
 import { LockScreen } from './screens/LockScreen.tsx';
 import { Onboarding } from './screens/Onboarding.tsx';
+import { Calendar } from './screens/Calendar.tsx';
 import { Placeholder } from './screens/Placeholder.tsx';
 import { Settings } from './screens/Settings.tsx';
 import { Today } from './screens/Today.tsx';
@@ -24,6 +26,8 @@ export function App({ dbName }: { dbName?: string }) {
   const saveDayLog = useApp((s) => s.saveDayLog);
   const startPeriod = useApp((s) => s.startPeriod);
   const endPeriod = useApp((s) => s.endPeriod);
+  const togglePeriodDay = useApp((s) => s.togglePeriodDay);
+  const includeCycle = useApp((s) => s.includeCycle);
   const [sheetDate, setSheetDate] = useState<string | null>(null);
   const lockNow = useApp((s) => s.lock);
   const [tab, setTab] = useState<TabId>('today');
@@ -43,7 +47,7 @@ export function App({ dbName }: { dbName?: string }) {
   if (status === 'onboarding') return <Onboarding today={today} onDone={(input) => void completeOnboarding(input, today)} />;
   if (status === 'locked') return <LockScreen />;
 
-  const prediction = settings ? predict({ logs, settings, today }) : null;
+  const prediction = settings ? predict({ logs, settings, today, overrides: overridesFrom(settings) }) : null;
   return (
     <>
       {tab === 'today' && (
@@ -57,7 +61,17 @@ export function App({ dbName }: { dbName?: string }) {
           onLog={() => setSheetDate(today)}
         />
       )}
-      {tab === 'calendar' && <Placeholder title={de.tabs.calendar} />}
+      {tab === 'calendar' && settings && (
+        <Calendar
+          logs={logs}
+          settings={settings}
+          prediction={prediction}
+          today={today}
+          onOpenDay={setSheetDate}
+          onTogglePeriod={(d) => void togglePeriodDay(d)}
+          onIncludeCycle={(c) => void includeCycle(c)}
+        />
+      )}
       {tab === 'insights' && <Placeholder title={de.tabs.insights} />}
       {tab === 'settings' && <Settings />}
       <TabBar active={tab} onSelect={setTab} />

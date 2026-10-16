@@ -110,3 +110,28 @@ describe('period actions', () => {
     expect(s.getState().logs[0]!.flow).toBe('heavy');
   });
 });
+
+describe('calendar actions', () => {
+  it('toggles past period days and keeps other entries', async () => {
+    const s = createAppStore();
+    await s.getState().init(db());
+    await s.getState().completeOnboarding({ mode: 'track' }, '2026-10-16');
+    await s.getState().saveDayLog({ date: '2026-09-02', mood: ['calm'] });
+    await s.getState().togglePeriodDay('2026-09-02');
+    expect(s.getState().logs[0]).toEqual({ date: '2026-09-02', mood: ['calm'], flow: 'medium' });
+    await s.getState().togglePeriodDay('2026-09-02');
+    expect(s.getState().logs[0]).toEqual({ date: '2026-09-02', mood: ['calm'] });
+    await s.getState().togglePeriodDay('2026-09-03');
+    await s.getState().togglePeriodDay('2026-09-03');
+    expect(s.getState().logs).toHaveLength(1);
+  });
+
+  it('records included cycles once', async () => {
+    const s = createAppStore();
+    await s.getState().init(db());
+    await s.getState().completeOnboarding({ mode: 'track' }, '2026-10-16');
+    await s.getState().includeCycle('2026-05-01');
+    await s.getState().includeCycle('2026-05-01');
+    expect(s.getState().settings?.includedCycles).toEqual(['2026-05-01']);
+  });
+});

@@ -2,7 +2,7 @@ import { deriveCycles } from '../../engine/cycles.ts';
 import type { ISODate } from '../../engine/dates.ts';
 import { healthNotices, symptomPatterns, upcomingSymptoms } from '../../engine/insights.ts';
 import type { Prediction } from '../../engine/prediction.ts';
-import type { DayLog, Settings } from '../../engine/types.ts';
+import { overridesFrom, type DayLog, type Settings } from '../../engine/types.ts';
 import { de, formatRange } from '../../i18n/de.ts';
 
 const MAX_NOTES = 3;
@@ -11,7 +11,7 @@ const MAX_NOTES = 3;
 export function todayNotes(
   prediction: Prediction,
   logs: readonly DayLog[],
-  settings: Pick<Settings, 'mode' | 'birthYear'>,
+  settings: Pick<Settings, 'mode' | 'birthYear' | 'includedCycles' | 'excludedCycles'>,
   today: ISODate,
 ): string[] {
   const notes: string[] = [];
@@ -25,7 +25,7 @@ export function todayNotes(
   }
 
   const past = logs.filter((l) => l.date <= today);
-  const cycles = deriveCycles(past, { mode: settings.mode });
+  const cycles = deriveCycles(past, { mode: settings.mode, overrides: overridesFrom(settings) });
   const age = settings.birthYear ? Number(today.slice(0, 4)) - settings.birthYear : undefined;
   for (const id of healthNotices(cycles, past, today, age)) notes.push(n.health[id]);
   if (prediction.irregular && !notes.includes(n.health.high_variability)) notes.push(n.irregular);

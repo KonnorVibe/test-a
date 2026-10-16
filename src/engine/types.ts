@@ -62,6 +62,14 @@ export interface Settings {
   theme: 'system' | 'light' | 'dark';
   /** Blur the app while it is in the background (app switcher). */
   privacyShield?: boolean;
+  /** Cycle start dates the user chose to include despite a missed-log flag. */
+  includedCycles?: ISODate[];
+  /** Cycle start dates the user chose to leave out of the statistics. */
+  excludedCycles?: ISODate[];
+}
+
+export function overridesFrom(settings: Pick<Settings, 'includedCycles' | 'excludedCycles'>): CycleOverrides {
+  return { include: new Set(settings.includedCycles ?? []), exclude: new Set(settings.excludedCycles ?? []) };
 }
 
 /** User decisions about flagged cycles, keyed by cycle start date. */

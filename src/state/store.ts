@@ -21,6 +21,10 @@ export interface AppState {
   saveDayLog: (log: DayLog) => Promise<void>;
   /** "Periode begonnen": today gets bleeding unless it already has some. */
   startPeriod: (today: ISODate) => Promise<void>;
+  /** Quick back-entry: toggles bleeding on a past day, keeping everything else logged there. */
+  togglePeriodDay: (date: ISODate) => Promise<void>;
+  /** Counts a cycle flagged as a possible missed log after all. */
+  includeCycle: (start: ISODate) => Promise<void>;
   /** "Periode beendet": fills the unlogged days of the open period and marks today as its end. */
   endPeriod: (today: ISODate) => Promise<void>;
   setPin: (pin: string) => Promise<void>;
@@ -91,6 +95,26 @@ export function createAppStore() {
       const bleeding = log.flow && log.flow !== 'spotting';
       if (!bleeding) await r.saveDayLog({ ...log, flow: 'medium' });
       set({ logs: r.dayLogs() });
+    },
+
+    async togglePeriodDay(date) {
+      const r = need();
+      const log = r.getDayLog(date) ?? { date };
+      const bleeding = log.flow && log.flow !== 'spotting';
+      const next = { ...log };
+      if (bleeding) {
+        delete next.flow;
+        delete next.periodEnd;
+      } else {
+        next.flow = 'medium';
+      }
+      await r.saveDayLog(next);
+      set({ logs: r.dayLogs() });
+    },
+
+    async includeCycle(start) {
+      const included = get().settings?.includedCycles ?? [];
+      if (!included.includes(start)) await get().updateSettings({ includedCycles: [...included, start] });
     },
 
     async endPeriod(today) {

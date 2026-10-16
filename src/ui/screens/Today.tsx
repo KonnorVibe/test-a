@@ -14,7 +14,7 @@ const shortDay = (d: ISODate) => `${Number(d.slice(8))}.`;
 interface Props {
   prediction: Prediction | null;
   logs: readonly DayLog[];
-  settings: Pick<Settings, 'mode' | 'birthYear'>;
+  settings: Pick<Settings, 'mode' | 'birthYear' | 'includedCycles' | 'excludedCycles'>;
   today: ISODate;
   onPeriodStart: () => void;
   onPeriodEnd: () => void;
