@@ -1,0 +1,44 @@
+/* Design preview only (Phase 3); replaced by the real shell in Phase 4. */
+.preview-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--rule);
+}
+.preview-bar span {
+  margin-right: var(--space-2);
+}
+.preview-bar button {
+  min-height: 32px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  background: none;
+  cursor: pointer;
+}
+.preview-bar button[aria-pressed='true'] {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.preview-components {
+  max-width: 480px;
+  margin: calc(-96px + var(--space-5)) auto 0;
+  padding: var(--space-5) var(--gutter) calc(96px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--rule);
+}
+.preview-components h2 {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-bottom: var(--space-3);
+}
+.preview-components div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

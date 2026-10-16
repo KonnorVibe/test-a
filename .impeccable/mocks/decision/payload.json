@@ -1,0 +1,94 @@
+{
+  "title": "Visuelle Welt für aya",
+  "question": "Der Wurf hat „Almanach“ gesetzt. Behalten, eine Alternative nehmen oder neu würfeln.",
+  "options": [
+    {
+      "id": "assigned", "kind": "assigned", "label": "Almanach", "kicker": "THE ROLL",
+      "lineage": "Abreiß- und Bauernkalender, rot gedruckte Tage",
+      "thesis": "Der Zyklus als gesetztes Kalenderblatt: Periodentage sind die roten Tage, die Vorhersage steht als ehrliche Spanne „voraussichtlich“.",
+      "palette": ["#F3F1F6", "#2A2233", "#B4475A", "#178A85", "#7A66A8", "#D99A1E"],
+      "materials": ["Zweifarbdruck Schwarz + Rot", "Tabellenziffern", "Haarlinien"],
+      "viewport": "Oben die Hauptaussage in großer Ziffer, darunter der Zyklusring als Tagesrad mit Tagesstrichen und einer Klammer für die Spanne, ein Button „Periode begonnen“, Tab-Leiste unten.",
+      "risk": "Kann ins Nostalgische kippen, wenn der Satz zu schmuckvoll wird; hält nur mit strenger Typo-Disziplin.",
+      "raised": [
+        {"from": "challenger-ikeda", "raise": "Alle Zahlen in Tabellenziffern, Palette total: zwei Druckfarben plus Phasenfarben, keine Zufallsgrautöne."},
+        {"from": "challenger-doujin", "raise": "Kalender als strenges Raster ganzer Zellen; heute ist von Hand eingekreist."},
+        {"from": "challenger-japanese", "raise": "Ein einziges Haarlinien-System trägt alle Trennungen statt Karten und Schatten."},
+        {"from": "challenger-wallet", "raise": "Nichts verschwindet still: Vorhersagen, die sich verschieben, zeigen den alten Tag durchgestrichen."}
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html", "htmlFrame": "390x844"
+    },
+    {
+      "id": "model-pick", "kind": "pick", "label": "Wetterbericht", "kicker": "IMPECCABLE’S PICK",
+      "lineage": "TV-Wetterkarte und Regenwahrscheinlichkeit",
+      "thesis": "Die Periode wird vorhergesagt wie Regen: Tagesleiste mit Wahrscheinlichkeitsband statt einem festen Datum.",
+      "palette": ["#E9EEF3", "#1D2B3A", "#C2566A", "#2A9D97", "#8270B0"],
+      "materials": ["Wahrscheinlichkeitsbänder", "Tagesleiste", "kühle Fläche"],
+      "viewport": "Große Aussage „in 5 Tagen“, darunter eine 10-Tage-Leiste mit Prozentbalken, Ring kleiner darüber.",
+      "risk": "Am vertrautesten: Wetter-Metaphern landen in dieser Kategorie oft, eigenständig wird es erst über die Ausführung.",
+      "html": ".impeccable/mocks/decision/model-pick.html", "htmlFrame": "390x844"
+    },
+    {
+      "id": "challenger-atlas", "kind": "challenger", "catalogId": "notation-diagram-systems-star-atlas",
+      "label": "Sternatlas", "verdict": "competitive",
+      "lineage": "Himmelsatlas mit Magnituden-Punkten",
+      "thesis": "Der Zyklus als Sternbild: jeder Tag ein Punkt, Punktgröße trägt die Stärke der Blutung.",
+      "palette": ["#141A33", "#ECEAF4", "#D8607A", "#3FB8B0", "#9C8AD6"],
+      "materials": ["Nachtgrund", "Punktgrößen-Skala", "feine Koordinatenlinien"],
+      "viewport": "Dunkler Grund, Ring aus Tagespunkten unterschiedlicher Größe, Aussage in heller Serifen-Kursive darüber.",
+      "case": "Stark abends im Bett und klar in der Hierarchie; verliert bei Identifikation, wirkt eher Astro-App als Alltag.",
+      "risk": "Erinnert an Astrologie-Apps, und Dark als Standard passt nicht zu jedem Moment.",
+      "html": ".impeccable/mocks/decision/challenger-atlas.html", "htmlFrame": "390x844",
+      "hero": "https://impeccable.style/worlds/cards/notation-diagram-systems-star-atlas-hero.webp"
+    },
+    {
+      "id": "challenger-airport", "kind": "challenger", "catalogId": "wayfinding-cartography-signage-terminal-yellow-wayfinding",
+      "label": "Leitsystem", "verdict": "competitive",
+      "lineage": "Flughafen-Wegeleitsystem",
+      "thesis": "Eine Botschaft pro Band, die nächste Entscheidung monumental: „Periode in 5 Tagen“.",
+      "palette": ["#FFFFFF", "#111111", "#B4475A", "#178A85", "#7A66A8"],
+      "materials": ["Schilderbänder", "humanistische Grotesk", "Piktogramme"],
+      "viewport": "Ein farbiges Band oben mit riesiger Zahl, darunter Ring und ein Band pro Hinweis.",
+      "case": "Sehr klar; das Gelb kollidiert mit der Markenpalette und wird übersetzt, die Welt wirkt kühl statt warm.",
+      "risk": "Fühlt sich nach Behörde an statt nach Vertrauter.",
+      "html": ".impeccable/mocks/decision/challenger-airport.html", "htmlFrame": "390x844",
+      "hero": "https://impeccable.style/worlds/cards/wayfinding-cartography-signage-terminal-yellow-wayfinding-hero.webp"
+    },
+    {
+      "id": "challenger-ikeda", "kind": "challenger", "catalogId": "ikeda-datamatics", "label": "Datamatics", "verdict": "declined",
+      "lineage": "Ryoji Ikeda", "thesis": "Zyklus als Barcode-Feld in Schwarz-Weiß.", "palette": ["#000000", "#FFFFFF"],
+      "materials": ["Barcode", "Monospace"], "viewport": "Feld aus Tagesbalken.", "risk": "Kalt, verbietet die Pflichtfarben.",
+      "case": "Verliert beide Achsen.", "kept": "Tabellenziffern und totale Palette."
+    },
+    {
+      "id": "challenger-doujin", "kind": "challenger", "catalogId": "pop-culture-shelf-doujin-event-catalog", "label": "Messekatalog", "verdict": "declined",
+      "lineage": "Doujin-Messekatalog", "thesis": "Tage als Briefmarken-Zellen.", "palette": ["#E6E3DC", "#111111", "#B4475A"],
+      "materials": ["Zeitungspapier", "Kugelschreiber-Kreise"], "viewport": "Dichtes Zellenraster.", "risk": "Zu dicht, fremde Welt.",
+      "case": "Verliert beide Achsen.", "kept": "Raster ganzer Zellen, heute eingekreist."
+    },
+    {
+      "id": "challenger-japanese", "kind": "challenger", "catalogId": "japanese-high-density-web", "label": "Hohe Dichte", "verdict": "declined",
+      "lineage": "japanische Portalseiten", "thesis": "Alles auf einen Blick in Modulen.", "palette": ["#FFFFFF", "#111111", "#D0021B"],
+      "materials": ["Module", "Haarlinien"], "viewport": "Mosaik aus Kästen.", "risk": "Überfordert Gelegenheitsnutzerinnen.",
+      "case": "Verliert beide Achsen.", "kept": "Ein strenges Haarlinien-System."
+    },
+    {
+      "id": "challenger-wallet", "kind": "challenger", "catalogId": "vernacular-ephemera-jet-age-ticket-wallet", "label": "Ticketheft", "verdict": "declined",
+      "lineage": "Flugticket-Coupons", "thesis": "Jeder Zyklus ein Coupon.", "palette": ["#FFFFFF", "#1B2A52", "#C8102E"],
+      "materials": ["Durchschlag", "Stempel"], "viewport": "Coupon-Stapel.", "risk": "Reise-Metapher trägt nicht.",
+      "case": "Verliert beide Achsen.", "kept": "Nichts verschwindet still."
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "canon": true,
+  "canonCard": {
+    "kind": "canon", "label": "Kategorie-Standard",
+    "thesis": "Wie Flo & Co.: weißer Grund, großer rosa Kreis, Karten darunter, perfekt ausgeführt.",
+    "palette": ["#FFFFFF", "#1F1F2B", "#F25C7A", "#6FCFCB"],
+    "materials": ["Karten", "Verlauf im Kreis"],
+    "viewport": "Großer farbiger Kreis mit Text darin, Button, Karten-Feed.",
+    "risk": "Von Flo nicht zu unterscheiden, und genau das wolltest du nicht.",
+    "html": ".impeccable/mocks/decision/canon.html", "htmlFrame": "390x844"
+  },
+  "steer": true
+}

@@ -2,7 +2,7 @@
 
 Private Zyklus-App als installierbare PWA. Grundlage: [`docs/zyklus-app-prompt.md`](docs/zyklus-app-prompt.md) (im Prompt noch „Luna“, hier überall **aya** (kleingeschrieben)). Dieses Dokument hält fest, was gebaut wird, in welcher Reihenfolge und wo wir bewusst vom Prompt abweichen.
 
-Stand: 2026-10-16 · Phasen 0–2 (Setup, Engine, Crypto + Storage) abgeschlossen.
+Stand: 2026-10-16 · Phasen 0–3 (Setup, Engine, Crypto + Storage, Design-Grundlage) abgeschlossen.
 
 ---
 
@@ -110,6 +110,8 @@ scripts/
 
 ## 4. Design
 
+**Stand Phase 3:** `website-bauen` war nicht installiert, daher mit dem Skill **impeccable** umgesetzt. Gewählte Welt: **Sternatlas** (Tage als Punkte auf einer Umlaufbahn, Größe = Blutungsstärke, Bernstein nur für heute/Eisprung). Produktwahrheit in `PRODUCT.md`, System in `DESIGN.md` + `.impeccable/design.json`, Richtungsvertrag in `.impeccable/surfaces/`. Review: „ship“ nach zwei Fix-Runden.
+
 Über den Skill `Julian-Ivanov/website-bauen`, nur:
 - **Phase 1** (Briefing/Richtung), **Phase 3** (Design-System), **Phase 4** (Umsetzung), **Phase 6** (Feinschliff/QA)
 - plus `schreibregeln.md` für alle UI-Texte
@@ -157,7 +159,7 @@ Nach jeder Phase: `npm test`, Commit, kurze Rückmeldung an dich.
 
 | Punkt | Status |
 |---|---|
-| Plugin **impeccable** installiert? | **Nein**, lokal nicht gefunden. Muss vor Phase 3 installiert werden. |
+| Plugin **impeccable** installiert? | **Ja** (4.6.0), in Phase 3 genutzt. |
 | Repo `KonnorVibe/test-a` leer? | **Ja**, verbunden (origin/main). Dateibaum leer, Historie eines Vorprojekts bleibt erhalten. |
 | GitHub Pages = öffentlicher Code | Aus meiner Sicht **okay**: Es gibt keine Geheimnisse im Code, die Sicherheit hängt nicht davon ab, dass der Code geheim bleibt. Kostenloses Pages braucht ein öffentliches Repo (privat nur mit GitHub Pro). Daten der Nutzerinnen sind nie im Repo. |
 | Schlanke v1, Rest „erweitert“? | **Ja**, empfohlen, siehe §2.3. Engine trotzdem komplett. |
