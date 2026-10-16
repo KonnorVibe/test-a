@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deriveCycles, derivePeriods } from './cycles.ts';
+import { deriveCycles, derivePeriods, openPeriod } from './cycles.ts';
 import { periodLogs } from './fixtures.ts';
 import type { DayLog } from './types.ts';
 
@@ -56,5 +56,29 @@ describe('deriveCycles', () => {
     const { logs } = periodLogs('2025-01-01', [28, 28]);
     const cycles = deriveCycles(logs, { overrides: { exclude: new Set(['2025-01-01']) } });
     expect(cycles[0]!.excluded?.reason).toBe('user');
+  });
+});
+
+describe('openPeriod', () => {
+  const start: DayLog[] = [{ date: '2026-10-10', flow: 'heavy' }];
+
+  it('keeps a just-started period open for the next days', () => {
+    expect(openPeriod(start, '2026-10-10')).toEqual({ start: '2026-10-10', day: 1 });
+    expect(openPeriod(start, '2026-10-12')).toEqual({ start: '2026-10-10', day: 3 });
+    expect(openPeriod(start, '2026-10-13')).toBeNull();
+  });
+
+  it('follows ongoing bleeding and closes on the end mark', () => {
+    const logs: DayLog[] = [...start, { date: '2026-10-13', flow: 'light' }];
+    expect(openPeriod(logs, '2026-10-15')?.day).toBe(6);
+    const ended: DayLog[] = [...start, { date: '2026-10-11', flow: 'medium', periodEnd: true }];
+    expect(openPeriod(ended, '2026-10-11')?.day).toBe(2);
+    expect(openPeriod(ended, '2026-10-12')).toBeNull();
+  });
+
+  it('never runs longer than 10 days', () => {
+    const logs: DayLog[] = Array.from({ length: 12 }, (_, i) => ({ date: `2026-10-${String(10 + i).padStart(2, '0')}`, flow: 'light' as const }));
+    expect(openPeriod(logs, '2026-10-19')?.day).toBe(10);
+    expect(openPeriod(logs, '2026-10-20')).toBeNull();
   });
 });

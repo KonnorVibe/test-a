@@ -3,6 +3,7 @@ import { todayLocal } from '../engine/dates.ts';
 import { predict } from '../engine/prediction.ts';
 import { de } from '../i18n/de.ts';
 import { useApp } from '../state/store.ts';
+import { DayLogSheet } from './components/DayLogSheet.tsx';
 import { TabBar, type TabId } from './components/TabBar.tsx';
 import { useAutoLock, usePrivacyShield, useTheme } from './hooks/useAppEnvironment.ts';
 import { LockScreen } from './screens/LockScreen.tsx';
@@ -20,6 +21,10 @@ export function App({ dbName }: { dbName?: string }) {
   const pinSet = useApp((s) => s.pinSet);
   const init = useApp((s) => s.init);
   const completeOnboarding = useApp((s) => s.completeOnboarding);
+  const saveDayLog = useApp((s) => s.saveDayLog);
+  const startPeriod = useApp((s) => s.startPeriod);
+  const endPeriod = useApp((s) => s.endPeriod);
+  const [sheetDate, setSheetDate] = useState<string | null>(null);
   const lockNow = useApp((s) => s.lock);
   const [tab, setTab] = useState<TabId>('today');
   const today = todayLocal();
@@ -42,12 +47,30 @@ export function App({ dbName }: { dbName?: string }) {
   return (
     <>
       {tab === 'today' && (
-        <Today prediction={prediction} logs={logs} today={today} onPeriodToggle={() => {}} onLog={() => {}} />
+        <Today
+          prediction={prediction}
+          logs={logs}
+          settings={settings!}
+          today={today}
+          onPeriodStart={() => void startPeriod(today)}
+          onPeriodEnd={() => void endPeriod(today)}
+          onLog={() => setSheetDate(today)}
+        />
       )}
       {tab === 'calendar' && <Placeholder title={de.tabs.calendar} />}
       {tab === 'insights' && <Placeholder title={de.tabs.insights} />}
       {tab === 'settings' && <Settings />}
       <TabBar active={tab} onSelect={setTab} />
+      {sheetDate && (
+        <DayLogSheet
+          date={sheetDate}
+          today={today}
+          log={logs.find((l) => l.date === sheetDate)}
+          history={logs}
+          onSave={(log) => void saveDayLog(log)}
+          onClose={() => setSheetDate(null)}
+        />
+      )}
     </>
   );
 }

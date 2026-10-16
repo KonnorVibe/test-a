@@ -30,6 +30,8 @@ export interface DayLog {
   sex?: { protected?: boolean }[];
   medication?: string[];
   note?: string;
+  /** Set on the day the user tapped "Periode beendet". */
+  periodEnd?: true;
 }
 
 export type ExclusionReason = 'outlier' | 'possible_missed_log' | 'pregnancy' | 'postpartum' | 'user';

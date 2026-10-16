@@ -84,3 +84,29 @@ describe('app store', () => {
     expect(s.getState().status).toBe('ready');
   });
 });
+
+describe('period actions', () => {
+  it('starts a period today and ends it, filling the days in between', async () => {
+    const s = createAppStore();
+    await s.getState().init(db());
+    await s.getState().completeOnboarding({ mode: 'track' }, '2026-10-10');
+    await s.getState().startPeriod('2026-10-10');
+    await s.getState().saveDayLog({ date: '2026-10-11', symptoms: ['cramps'] });
+    await s.getState().endPeriod('2026-10-12');
+    expect(s.getState().logs.map((l) => [l.date, l.flow, l.periodEnd ?? false])).toEqual([
+      ['2026-10-10', 'medium', false],
+      ['2026-10-11', 'medium', false],
+      ['2026-10-12', 'medium', true],
+    ]);
+    expect(s.getState().logs[1]!.symptoms).toEqual(['cramps']);
+  });
+
+  it('keeps an existing heavier flow when starting', async () => {
+    const s = createAppStore();
+    await s.getState().init(db());
+    await s.getState().completeOnboarding({ mode: 'track' }, '2026-10-10');
+    await s.getState().saveDayLog({ date: '2026-10-10', flow: 'heavy' });
+    await s.getState().startPeriod('2026-10-10');
+    expect(s.getState().logs[0]!.flow).toBe('heavy');
+  });
+});

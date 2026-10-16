@@ -1,5 +1,5 @@
 import 'fake-indexeddb/auto';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { appStore } from '../state/store.ts';
 import { App } from './App.tsx';
@@ -22,6 +22,17 @@ describe('App', () => {
 
     expect(await screen.findByRole('heading', { name: 'Noch keine Periode eingetragen' })).toBeTruthy();
     expect(appStore.getState().settings?.mode).toBe('conceive');
+
+    click('Periode begonnen');
+    expect(await screen.findByRole('heading', { name: 'Tag 1 deiner Periode' })).toBeTruthy();
+    click('Heute eintragen');
+    const sheet = await screen.findByRole('dialog', { name: 'Heute' });
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Krämpfe' }));
+    fireEvent.click(within(sheet).getByRole('button', { name: 'stark' }));
+    fireEvent.click(within(sheet).getByRole('button', { name: 'Fertig' }));
+    expect(await screen.findByText((_, el) => el?.className === 'today-summary' && /stark, Krämpfe$/.test(el.textContent ?? ''))).toBeTruthy();
+    click('Periode beendet');
+    expect(await screen.findByRole('button', { name: 'Periode begonnen' })).toBeTruthy();
 
     click('Einstellungen');
     click('PIN festlegen');

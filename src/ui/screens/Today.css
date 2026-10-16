@@ -57,3 +57,28 @@
   max-width: 34ch;
   text-wrap: pretty;
 }
+
+.today-summary {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+  text-wrap: pretty;
+}
+.today-summary span {
+  font-family: var(--font-name);
+  font-style: italic;
+  color: var(--ink);
+}
+
+.today-notes {
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.today-notes li {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: var(--text-sm);
+  text-wrap: pretty;
+}

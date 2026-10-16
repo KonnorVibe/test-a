@@ -3,7 +3,7 @@ import {
   IRREGULAR_WIDENING, LH_OVULATION_SD, MAD_TO_SD, MAX_CYCLES_USED, PEAK_DAYS_BEFORE_OVULATION,
   PERSONAL_DOMINANCE_CYCLES, PRIOR_CYCLE_SD, PRIOR_LUTEAL_SD, RECENCY_HALF_LIFE, SHRINKAGE_K, Z_80, figoVariabilityLimit,
 } from './constants.ts';
-import { deriveCycles, validCycles } from './cycles.ts';
+import { deriveCycles, openPeriod, validCycles } from './cycles.ts';
 import { addDays, diffDays, type ISODate } from './dates.ts';
 import { confirmOvulation } from './ovulation.ts';
 import { mad, median, recencyWeights, shrink, taperedK, weightedMedian } from './stats.ts';
@@ -209,7 +209,9 @@ export function predict({ logs, settings, today, overrides }: PredictInput): Pre
     usedCycles: estimate.n,
     suggestPregnancyTest: late && unprotectedInWindow,
   };
-  if (today <= current.periodEnd) prediction.periodDay = cycleDay;
+  const open = openPeriod(past, today);
+  if (open && open.start === start) prediction.periodDay = open.day;
+  else if (today <= current.periodEnd) prediction.periodDay = cycleDay;
   if (ovulation) prediction.ovulation = ovulation;
   if (fertileWindow) prediction.fertileWindow = fertileWindow;
   if (late) prediction.lateByDays = diffDays(today, nextPeriod.mostLikely);

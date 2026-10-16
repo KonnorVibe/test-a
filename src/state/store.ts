@@ -1,7 +1,8 @@
 import { createStore } from 'zustand/vanilla';
 import { useStore } from 'zustand';
 import { hashPin, remainingLockoutMs, verifyPin, type LockoutState } from '../crypto/pin.ts';
-import type { ISODate } from '../engine/dates.ts';
+import { openPeriod } from '../engine/cycles.ts';
+import { eachDay, type ISODate } from '../engine/dates.ts';
 import type { DayLog, Settings } from '../engine/types.ts';
 import { Repository, requestPersistence } from '../storage/repository.ts';
 import { buildOnboarding, type OnboardingInput } from './onboarding.ts';
@@ -18,6 +19,10 @@ export interface AppState {
   completeOnboarding: (input: OnboardingInput, today: ISODate) => Promise<void>;
   updateSettings: (patch: Partial<Settings>) => Promise<void>;
   saveDayLog: (log: DayLog) => Promise<void>;
+  /** "Periode begonnen": today gets bleeding unless it already has some. */
+  startPeriod: (today: ISODate) => Promise<void>;
+  /** "Periode beendet": fills the unlogged days of the open period and marks today as its end. */
+  endPeriod: (today: ISODate) => Promise<void>;
   setPin: (pin: string) => Promise<void>;
   removePin: () => Promise<void>;
   lock: () => void;
@@ -77,6 +82,29 @@ export function createAppStore() {
     async saveDayLog(log) {
       const r = need();
       await r.saveDayLog(log);
+      set({ logs: r.dayLogs() });
+    },
+
+    async startPeriod(today) {
+      const r = need();
+      const log = r.getDayLog(today) ?? { date: today };
+      const bleeding = log.flow && log.flow !== 'spotting';
+      if (!bleeding) await r.saveDayLog({ ...log, flow: 'medium' });
+      set({ logs: r.dayLogs() });
+    },
+
+    async endPeriod(today) {
+      const r = need();
+      const open = openPeriod(r.dayLogs(), today);
+      if (!open) return;
+      for (const date of eachDay(open.start, today)) {
+        const log = r.getDayLog(date) ?? { date };
+        const bleeding = log.flow && log.flow !== 'spotting';
+        const next = { ...log, ...(bleeding ? {} : { flow: 'medium' as const }) };
+        if (date === today) next.periodEnd = true;
+        else delete next.periodEnd;
+        await r.saveDayLog(next);
+      }
       set({ logs: r.dayLogs() });
     },
 

@@ -98,6 +98,26 @@ export function deriveCycles(logs: readonly DayLog[], options: DeriveOptions = {
   return cycles;
 }
 
+/** Bleeding may pause this many days without the period counting as over. */
+const OPEN_PERIOD_GAP = 2;
+/** A period is never treated as ongoing beyond this many days. */
+const OPEN_PERIOD_MAX_DAYS = 10;
+
+/**
+ * The period running today, if any: it started at most 10 days ago, bleeding was logged within the
+ * last 2 days, and the user has not marked it as ended before today. Lets the Today screen say
+ * "Tag 3 deiner Periode" while only the first day has been logged.
+ */
+export function openPeriod(logs: readonly DayLog[], today: ISODate): { start: ISODate; day: number } | null {
+  const last = derivePeriods(logs.filter((l) => l.date <= today)).at(-1);
+  if (!last) return null;
+  const day = diffDays(today, last.start) + 1;
+  if (day > OPEN_PERIOD_MAX_DAYS) return null;
+  const endMark = logs.find((l) => l.periodEnd && l.date >= last.start && l.date <= today);
+  if (endMark) return today <= endMark.date ? { start: last.start, day } : null;
+  return diffDays(today, last.end) <= OPEN_PERIOD_GAP ? { start: last.start, day } : null;
+}
+
 /** Completed cycles usable for statistics (not excluded), oldest first. */
 export function validCycles(cycles: readonly Cycle[]): Cycle[] {
   return cycles.filter((c) => c.length !== undefined && !c.excluded);

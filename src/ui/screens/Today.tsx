@@ -1,11 +1,12 @@
 import type { ISODate } from '../../engine/dates.ts';
 import type { Prediction } from '../../engine/prediction.ts';
-import type { DayLog } from '../../engine/types.ts';
+import type { DayLog, Settings } from '../../engine/types.ts';
 import { confidenceLabel, de, formatLongDate, formatRange, statement } from '../../i18n/de.ts';
 import { Button } from '../components/Button.tsx';
 import { CycleRing } from '../components/CycleRing.tsx';
 import { Legend } from '../components/Legend.tsx';
 import { ringModel } from '../components/ringModel.ts';
+import { logSummary, todayNotes } from './todayNotes.ts';
 import './Today.css';
 
 const shortDay = (d: ISODate) => `${Number(d.slice(8))}.`;
@@ -13,12 +14,15 @@ const shortDay = (d: ISODate) => `${Number(d.slice(8))}.`;
 interface Props {
   prediction: Prediction | null;
   logs: readonly DayLog[];
+  settings: Pick<Settings, 'mode' | 'birthYear'>;
   today: ISODate;
-  onPeriodToggle: () => void;
+  onPeriodStart: () => void;
+  onPeriodEnd: () => void;
   onLog: () => void;
 }
 
-export function Today({ prediction, logs, today, onPeriodToggle, onLog }: Props) {
+export function Today({ prediction, logs, settings, today, onPeriodStart, onPeriodEnd, onLog }: Props) {
+  const summary = logSummary(logs.find((l) => l.date === today));
   if (!prediction) {
     return (
       <main className="today">
@@ -31,17 +35,21 @@ export function Today({ prediction, logs, today, onPeriodToggle, onLog }: Props)
           <p>{de.emptyToday.body}</p>
         </section>
         <div className="today-actions">
-          <Button onClick={onPeriodToggle}>{de.periodStarted}</Button>
+          <Button onClick={onPeriodStart}>{de.periodStarted}</Button>
           <Button variant="secondary" onClick={onLog}>
             {de.logToday}
           </Button>
         </div>
+        {summary && <TodaySummary text={summary} />}
       </main>
     );
   }
+  const notes = todayNotes(prediction, logs, settings, today);
   const model = ringModel(prediction, logs, today);
   const range = formatRange(prediction.nextPeriod.earliest, prediction.nextPeriod.latest);
-  const inPeriod = prediction.periodDay !== undefined;
+  // Once "Periode beendet" was tapped, the button offers a new start again.
+  const ended = logs.some((l) => l.periodEnd && l.date >= prediction.cycleStart);
+  const inPeriod = prediction.periodDay !== undefined && !ended;
   return (
     <main className="today">
       <header className="today-head">
@@ -72,11 +80,29 @@ export function Today({ prediction, logs, today, onPeriodToggle, onLog }: Props)
       </figure>
 
       <div className="today-actions">
-        <Button onClick={onPeriodToggle}>{inPeriod ? de.periodEnded : de.periodStarted}</Button>
+        <Button onClick={inPeriod ? onPeriodEnd : onPeriodStart}>{inPeriod ? de.periodEnded : de.periodStarted}</Button>
         <Button variant="secondary" onClick={onLog}>
           {de.logToday}
         </Button>
       </div>
+
+      {summary && <TodaySummary text={summary} />}
+
+      {notes.length > 0 && (
+        <ul className="today-notes">
+          {notes.map((n) => (
+            <li key={n}>{n}</li>
+          ))}
+        </ul>
+      )}
     </main>
+  );
+}
+
+function TodaySummary({ text }: { text: string }) {
+  return (
+    <p className="today-summary">
+      <span>{de.log.summary}</span> {text}
+    </p>
   );
 }
