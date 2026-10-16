@@ -1,8 +1,8 @@
 # PLAN – aya
 
-Private Zyklus-App als installierbare PWA. Grundlage: `zyklus-app-prompt.md` (im Prompt noch „Luna“, hier überall **aya** (kleingeschrieben)). Dieses Dokument hält fest, was gebaut wird, in welcher Reihenfolge und wo wir bewusst vom Prompt abweichen.
+Private Zyklus-App als installierbare PWA. Grundlage: [`docs/zyklus-app-prompt.md`](docs/zyklus-app-prompt.md) (im Prompt noch „Luna“, hier überall **aya** (kleingeschrieben)). Dieses Dokument hält fest, was gebaut wird, in welcher Reihenfolge und wo wir bewusst vom Prompt abweichen.
 
-Stand: 2026-10-16 · Phase 0 (Setup) abgeschlossen.
+Stand: 2026-10-16 · Phase 0 (Setup) und Phase 1 (Engine) abgeschlossen.
 
 ---
 
@@ -73,6 +73,14 @@ Ein Backup muss auf einem neuen Gerät lesbar sein, der Geräteschlüssel taugt 
 - CSV-Import/-Export, Druckansicht für Arzttermine
 
 **Wichtig:** Die Engine wird trotzdem **vollständig in v1** gebaut und getestet (inkl. BBT, LH, Backtest), weil die Logik zusammenhängt und Tests billig sind. v2 ist nur UI. Backtest läuft in v1 als Test (Trefferquote 70–90 %), nicht als Anzeige.
+
+### 2.4 Engine-Details (Phase 1)
+
+- **Schrumpfung mit auslaufendem Prior:** Der Prompt nennt `k = 3` fest. Damit würde ein stabiler 32-Tage-Zyklus dauerhaft auf 31 Tage geschätzt. Das Prior-Gewicht für den Mittelwert sinkt deshalb linear von 3 auf 0 bei 6 Zyklen; die Streuung behält `k = 3` (bleibt vorsichtig).
+- **Ausschlussgrund `outlier`** ergänzt (Zyklen < 15 oder > 90 Tage), weil das Datenmodell im Prompt dafür keinen Grund hat.
+- **FIGO-Regularität ohne Alter:** Grenze 9 Tage (die großzügige), um Fehlalarme zu vermeiden.
+- **Symptom-Muster** zusätzlich nur, wenn das Symptom in mindestens der Hälfte der Zyklen in der Phase vorkam.
+- **Backtest** auf synthetischen Daten (Normalverteilung 29 ± 2 Tage, 5 Seeds × 40 Zyklen): Intervall-Trefferquote im Zielkorridor 70–90 %, MAE 1–3 Tage.
 
 ---
 

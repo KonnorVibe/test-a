@@ -12,6 +12,8 @@ export default tseslint.config(
     plugins: { 'react-hooks': reactHooks },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // noUncheckedIndexedAccess makes index reads optional; '!' after a bounds check is intended.
+      '@typescript-eslint/no-non-null-assertion': 'off',
       // Zero network: block network APIs at lint time too (privacy-check is the hard gate).
       'no-restricted-globals': ['error', 'fetch', 'XMLHttpRequest', 'WebSocket', 'EventSource'],
       'no-restricted-properties': [
