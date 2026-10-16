@@ -55,8 +55,11 @@ export interface Settings {
   birthYear?: number;
   defaultCycleLength?: number;
   defaultPeriodLength?: number;
+  /** Inactivity minutes before auto-lock; only applies while a PIN is set. */
   lockMinutes: number;
   theme: 'system' | 'light' | 'dark';
+  /** Blur the app while it is in the background (app switcher). */
+  privacyShield?: boolean;
 }
 
 /** User decisions about flagged cycles, keyed by cycle start date. */

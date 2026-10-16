@@ -8,6 +8,12 @@ export default defineConfig({
   base: './',
   plugins: [
     react(),
+    {
+      // Dev server only: allow Vite's HMR socket. The build keeps connect-src 'none'.
+      name: 'aya-dev-csp',
+      apply: 'serve',
+      transformIndexHtml: (html) => html.replace("connect-src 'none'", "connect-src 'self' ws://localhost:*"),
+    },
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,

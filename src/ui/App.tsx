@@ -1,72 +1,52 @@
-import { useEffect, useState } from 'react';
-import { addDays, todayLocal } from '../engine/dates.ts';
+import { useCallback, useEffect, useState } from 'react';
+import { todayLocal } from '../engine/dates.ts';
 import { predict } from '../engine/prediction.ts';
-import type { DayLog, Flow } from '../engine/types.ts';
 import { de } from '../i18n/de.ts';
-import { Chip } from './components/Chip.tsx';
+import { useApp } from '../state/store.ts';
 import { TabBar, type TabId } from './components/TabBar.tsx';
+import { useAutoLock, usePrivacyShield, useTheme } from './hooks/useAppEnvironment.ts';
+import { LockScreen } from './screens/LockScreen.tsx';
+import { Onboarding } from './screens/Onboarding.tsx';
+import { Placeholder } from './screens/Placeholder.tsx';
+import { Settings } from './screens/Settings.tsx';
 import { Today } from './screens/Today.tsx';
 import './theme/tokens.css';
 import './theme/base.css';
-import './App.css';
 
-type Theme = 'system' | 'light' | 'dark';
-
-/** Synthetic sample: six ~29-day cycles, today 5 days before the expected period. */
-function sampleLogs(today: string): DayLog[] {
-  const lengths = [29, 28, 30, 29, 28, 29];
-  const flows: Flow[] = ['medium', 'heavy', 'medium', 'light', 'spotting'];
-  const currentStart = addDays(today, -24);
-  let start = addDays(currentStart, -lengths.reduce((a, b) => a + b));
-  const logs: DayLog[] = [];
-  for (const len of [...lengths, 0]) {
-    flows.forEach((flow, i) => logs.push({ date: addDays(start, i), flow }));
-    start = addDays(start, len);
-  }
-  return logs;
-}
-
-export function App() {
-  const today = todayLocal();
-  const [logs] = useState(() => sampleLogs(today));
+export function App({ dbName }: { dbName?: string }) {
+  const status = useApp((s) => s.status);
+  const settings = useApp((s) => s.settings);
+  const logs = useApp((s) => s.logs);
+  const pinSet = useApp((s) => s.pinSet);
+  const init = useApp((s) => s.init);
+  const completeOnboarding = useApp((s) => s.completeOnboarding);
+  const lockNow = useApp((s) => s.lock);
   const [tab, setTab] = useState<TabId>('today');
-  const [theme, setTheme] = useState<Theme>('system');
-  const [picked, setPicked] = useState<string[]>(['Krämpfe']);
-  const prediction = predict({ logs, settings: { mode: 'track' }, today });
+  const today = todayLocal();
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'system') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', theme);
-  }, [theme]);
+    void init(dbName);
+  }, [init, dbName]);
 
+  const lock = useCallback(() => lockNow(), [lockNow]);
+  useTheme(settings?.theme);
+  useAutoLock(pinSet && status === 'ready', settings?.lockMinutes ?? 5, lock);
+  usePrivacyShield(!!settings?.privacyShield);
+
+  if (status === 'loading') return null;
+  if (status === 'error') return <p className="load-error">{de.loadError}</p>;
+  if (status === 'onboarding') return <Onboarding today={today} onDone={(input) => void completeOnboarding(input, today)} />;
+  if (status === 'locked') return <LockScreen />;
+
+  const prediction = settings ? predict({ logs, settings, today }) : null;
   return (
     <>
-      <div className="preview-bar" role="group" aria-label={de.theme.label}>
-        <span>{de.sampleData}</span>
-        {(['system', 'light', 'dark'] as const).map((t) => (
-          <button key={t} type="button" aria-pressed={theme === t} onClick={() => setTheme(t)}>
-            {de.theme[t]}
-          </button>
-        ))}
-      </div>
-      {prediction && (
+      {tab === 'today' && (
         <Today prediction={prediction} logs={logs} today={today} onPeriodToggle={() => {}} onLog={() => {}} />
       )}
-      <section className="preview-components" aria-label={de.preview.components}>
-        <h2>{de.preview.components}</h2>
-        <div>
-          {de.preview.symptoms.map((s) => (
-            <Chip
-              key={s}
-              selected={picked.includes(s)}
-              onToggle={() => setPicked((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))}
-            >
-              {s}
-            </Chip>
-          ))}
-        </div>
-      </section>
+      {tab === 'calendar' && <Placeholder title={de.tabs.calendar} />}
+      {tab === 'insights' && <Placeholder title={de.tabs.insights} />}
+      {tab === 'settings' && <Settings />}
       <TabBar active={tab} onSelect={setTab} />
     </>
   );

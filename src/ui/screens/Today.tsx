@@ -11,7 +11,7 @@ import './Today.css';
 const shortDay = (d: ISODate) => `${Number(d.slice(8))}.`;
 
 interface Props {
-  prediction: Prediction;
+  prediction: Prediction | null;
   logs: readonly DayLog[];
   today: ISODate;
   onPeriodToggle: () => void;
@@ -19,6 +19,26 @@ interface Props {
 }
 
 export function Today({ prediction, logs, today, onPeriodToggle, onLog }: Props) {
+  if (!prediction) {
+    return (
+      <main className="today">
+        <header className="today-head">
+          <span className="wordmark">{de.appName}</span>
+          <span>{formatLongDate(today)}</span>
+        </header>
+        <section className="today-statement today-empty">
+          <h1>{de.emptyToday.title}</h1>
+          <p>{de.emptyToday.body}</p>
+        </section>
+        <div className="today-actions">
+          <Button onClick={onPeriodToggle}>{de.periodStarted}</Button>
+          <Button variant="secondary" onClick={onLog}>
+            {de.logToday}
+          </Button>
+        </div>
+      </main>
+    );
+  }
   const model = ringModel(prediction, logs, today);
   const range = formatRange(prediction.nextPeriod.earliest, prediction.nextPeriod.latest);
   const inPeriod = prediction.periodDay !== undefined;

@@ -77,3 +77,14 @@ a {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Privacy shield: blurred while the app is in the background. */
+:root[data-shield] #root {
+  filter: blur(28px);
+}
+
+.load-error {
+  max-width: 34ch;
+  margin: 0 auto;
+  padding: var(--space-7) var(--gutter);
+}

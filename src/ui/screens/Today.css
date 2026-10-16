@@ -52,3 +52,8 @@
   gap: var(--space-3);
   margin-top: var(--space-5);
 }
+
+.today-empty p {
+  max-width: 34ch;
+  text-wrap: pretty;
+}
