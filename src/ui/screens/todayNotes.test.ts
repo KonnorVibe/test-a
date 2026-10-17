@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { addDays } from '../../engine/dates.ts';
 import { mergeLogs, periodLogs } from '../../engine/fixtures.ts';
 import { predict } from '../../engine/prediction.ts';
-import { logSummary, todayNotes } from './todayNotes.ts';
+import { backupDue, logSummary, todayNotes } from './todayNotes.ts';
 
 describe('todayNotes', () => {
   const { logs, current } = periodLogs('2026-01-05', Array(6).fill(28));
@@ -10,7 +10,7 @@ describe('todayNotes', () => {
   it('says nothing on an ordinary day', () => {
     const today = addDays(current, 8);
     const p = predict({ logs, settings: { mode: 'track' }, today })!;
-    expect(todayNotes(p, logs, { mode: 'track' }, today)).toEqual([]);
+    expect(todayNotes(p, logs, { mode: 'track' }, today, `${today}T08:00:00.000Z`)).toEqual([]);
   });
 
   it('leads with a late period and the test suggestion', () => {
@@ -37,5 +37,15 @@ describe('logSummary', () => {
     );
     expect(logSummary(undefined)).toBeNull();
     expect(logSummary({ date: '2026-01-01' })).toBeNull();
+  });
+});
+
+describe('backupDue', () => {
+  const logs = [{ date: '2026-08-01', flow: 'medium' as const }];
+  it('reminds after 30 days without a backup', () => {
+    expect(backupDue(logs, undefined, '2026-08-20')).toBe(false);
+    expect(backupDue(logs, undefined, '2026-09-05')).toBe(true);
+    expect(backupDue(logs, '2026-09-01T10:00:00.000Z', '2026-09-05')).toBe(false);
+    expect(backupDue([], undefined, '2026-12-01')).toBe(false);
   });
 });

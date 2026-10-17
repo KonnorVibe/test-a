@@ -135,3 +135,24 @@ describe('calendar actions', () => {
     expect(s.getState().settings?.includedCycles).toEqual(['2026-05-01']);
   });
 });
+
+describe('data actions', () => {
+  it('exports, restores elsewhere and wipes', async () => {
+    const a = createAppStore();
+    await a.getState().init(db());
+    await a.getState().completeOnboarding({ lastPeriodStart: '2026-10-01', mode: 'track' }, '2026-10-16');
+    const { text } = await a.getState().exportBackup('lange-passphrase');
+    expect(a.getState().lastBackupAt).toBeTypeOf('string');
+
+    const b = createAppStore();
+    await b.getState().init(db());
+    await b.getState().completeOnboarding({ mode: 'conceive' }, '2026-10-16');
+    expect(await b.getState().importBackup(text, 'lange-passphrase')).toBe(5);
+    expect(b.getState().settings?.mode).toBe('track');
+    expect(b.getState().logs).toHaveLength(5);
+
+    await b.getState().wipeAll();
+    expect(b.getState().status).toBe('onboarding');
+    expect(b.getState().logs).toEqual([]);
+  });
+});

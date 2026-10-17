@@ -21,6 +21,7 @@ export function App({ dbName }: { dbName?: string }) {
   const settings = useApp((s) => s.settings);
   const logs = useApp((s) => s.logs);
   const pinSet = useApp((s) => s.pinSet);
+  const lastBackupAt = useApp((s) => s.lastBackupAt);
   const init = useApp((s) => s.init);
   const completeOnboarding = useApp((s) => s.completeOnboarding);
   const saveDayLog = useApp((s) => s.saveDayLog);
@@ -56,6 +57,7 @@ export function App({ dbName }: { dbName?: string }) {
           logs={logs}
           settings={settings!}
           today={today}
+          lastBackupAt={lastBackupAt}
           onPeriodStart={() => void startPeriod(today)}
           onPeriodEnd={() => void endPeriod(today)}
           onLog={() => setSheetDate(today)}
@@ -73,7 +75,7 @@ export function App({ dbName }: { dbName?: string }) {
         />
       )}
       {tab === 'insights' && settings && <Insights logs={logs} settings={settings} today={today} />}
-      {tab === 'settings' && <Settings />}
+      {tab === 'settings' && <Settings prediction={prediction} today={today} />}
       <TabBar active={tab} onSelect={setTab} />
       {sheetDate && (
         <DayLogSheet

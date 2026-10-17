@@ -16,12 +16,13 @@ interface Props {
   logs: readonly DayLog[];
   settings: Pick<Settings, 'mode' | 'birthYear' | 'includedCycles' | 'excludedCycles'>;
   today: ISODate;
+  lastBackupAt?: string | undefined;
   onPeriodStart: () => void;
   onPeriodEnd: () => void;
   onLog: () => void;
 }
 
-export function Today({ prediction, logs, settings, today, onPeriodStart, onPeriodEnd, onLog }: Props) {
+export function Today({ prediction, logs, settings, today, lastBackupAt, onPeriodStart, onPeriodEnd, onLog }: Props) {
   const summary = logSummary(logs.find((l) => l.date === today));
   if (!prediction) {
     return (
@@ -44,7 +45,7 @@ export function Today({ prediction, logs, settings, today, onPeriodStart, onPeri
       </main>
     );
   }
-  const notes = todayNotes(prediction, logs, settings, today);
+  const notes = todayNotes(prediction, logs, settings, today, lastBackupAt);
   const model = ringModel(prediction, logs, today);
   const range = formatRange(prediction.nextPeriod.earliest, prediction.nextPeriod.latest);
   // Once "Periode beendet" was tapped, the button offers a new start again.

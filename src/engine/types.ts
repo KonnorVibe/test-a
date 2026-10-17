@@ -62,6 +62,8 @@ export interface Settings {
   theme: 'system' | 'light' | 'dark';
   /** Blur the app while it is in the background (app switcher). */
   privacyShield?: boolean;
+  /** Neutral title for exported calendar events. */
+  icsTitle?: string;
   /** Cycle start dates the user chose to include despite a missed-log flag. */
   includedCycles?: ISODate[];
   /** Cycle start dates the user chose to leave out of the statistics. */

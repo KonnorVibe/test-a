@@ -4,7 +4,8 @@ import { hashPin, remainingLockoutMs, verifyPin, type LockoutState } from '../cr
 import { openPeriod } from '../engine/cycles.ts';
 import { eachDay, type ISODate } from '../engine/dates.ts';
 import type { DayLog, Settings } from '../engine/types.ts';
-import { Repository, requestPersistence } from '../storage/repository.ts';
+import { createBackup, restoreBackup } from '../import-export/backup.ts';
+import { DB_NAME, Repository, requestPersistence } from '../storage/repository.ts';
 import { buildOnboarding, type OnboardingInput } from './onboarding.ts';
 
 export type Status = 'loading' | 'onboarding' | 'locked' | 'ready' | 'error';
@@ -13,11 +14,14 @@ export type UnlockResult = { result: 'ok' } | { result: 'wrong'; waitMs: number 
 export interface AppState {
   status: Status;
   logs: DayLog[];
-  settings?: Settings;
+  settings?: Settings | undefined;
   pinSet: boolean;
+  /** ISO timestamp of the last backup export. */
+  lastBackupAt?: string | undefined;
   init: (dbName?: string) => Promise<void>;
   completeOnboarding: (input: OnboardingInput, today: ISODate) => Promise<void>;
-  updateSettings: (patch: Partial<Settings>) => Promise<void>;
+  /** Merges the patch; a key set to undefined is removed. */
+  updateSettings: (patch: { [K in keyof Settings]?: Settings[K] | undefined }) => Promise<void>;
   saveDayLog: (log: DayLog) => Promise<void>;
   /** "Periode begonnen": today gets bleeding unless it already has some. */
   startPeriod: (today: ISODate) => Promise<void>;
@@ -29,6 +33,12 @@ export interface AppState {
   endPeriod: (today: ISODate) => Promise<void>;
   setPin: (pin: string) => Promise<void>;
   removePin: () => Promise<void>;
+  /** Encrypts all data with the password; returns the file text and name. */
+  exportBackup: (password: string) => Promise<{ text: string; filename: string }>;
+  /** Replaces all data with the backup's content. Throws BackupError. */
+  importBackup: (text: string, password: string) => Promise<number>;
+  /** Deletes the database including the device key and starts over. */
+  wipeAll: () => Promise<void>;
   lock: () => void;
   unlock: (pin: string, now?: number) => Promise<UnlockResult>;
   /** Milliseconds until the next PIN attempt is allowed. */
@@ -41,6 +51,7 @@ export interface AppState {
  */
 export function createAppStore() {
   let repo: Repository | undefined;
+  let name = DB_NAME;
   const need = () => {
     if (!repo) throw new Error('Repository not open');
     return repo;
@@ -53,10 +64,13 @@ export function createAppStore() {
 
     async init(dbName) {
       try {
-        repo = await Repository.open(dbName);
+        name = dbName ?? DB_NAME;
+        repo = await Repository.open(name);
         const settings = repo.settings();
         const pinSet = !!(await repo.getMeta('pin'));
+        const lastBackupAt = await repo.getMeta('lastBackupAt');
         set({
+          ...(lastBackupAt ? { lastBackupAt } : {}),
           logs: repo.dayLogs(),
           pinSet,
           status: !settings ? 'onboarding' : pinSet ? 'locked' : 'ready',
@@ -78,7 +92,8 @@ export function createAppStore() {
 
     async updateSettings(patch) {
       const r = need();
-      const settings = { ...get().settings!, ...patch };
+      const merged = Object.entries({ ...get().settings!, ...patch }).filter(([, v]) => v !== undefined);
+      const settings = Object.fromEntries(merged) as unknown as Settings;
       await r.saveSettings(settings);
       set({ settings });
     },
@@ -144,6 +159,27 @@ export function createAppStore() {
       await r.setMeta('pin', undefined);
       await r.setMeta('lockout', undefined);
       set({ pinSet: false });
+    },
+
+    async exportBackup(password) {
+      const result = await createBackup(need(), password);
+      set({ lastBackupAt: await need().getMeta('lastBackupAt') });
+      return result;
+    },
+
+    async importBackup(text, password) {
+      const r = need();
+      const count = await restoreBackup(r, text, password);
+      const settings = r.settings();
+      set({ logs: r.dayLogs(), ...(settings ? { settings } : {}) });
+      return count;
+    },
+
+    async wipeAll() {
+      await Repository.wipe(name, repo);
+      repo = undefined;
+      set({ status: 'loading', logs: [], settings: undefined, pinSet: false, lastBackupAt: undefined });
+      await get().init(name);
     },
 
     lock() {
