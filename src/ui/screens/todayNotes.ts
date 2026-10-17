@@ -36,7 +36,7 @@ export function todayNotes(
   const cycles = deriveCycles(past, { mode: settings.mode, overrides: overridesFrom(settings) });
   const age = settings.birthYear ? Number(today.slice(0, 4)) - settings.birthYear : undefined;
   for (const id of healthNotices(cycles, past, today, age)) notes.push(n.health[id]);
-  if (backupDue(logs, lastBackupAt, today)) notes.push(n.backup);
+  if (backupDue(logs, lastBackupAt, today)) notes.push(lastBackupAt ? n.backup : n.backupNever);
   if (prediction.irregular && !notes.includes(n.health.high_variability)) notes.push(n.irregular);
 
   const upcoming = upcomingSymptoms(symptomPatterns(past, cycles), prediction, today);

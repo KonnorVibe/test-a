@@ -2,7 +2,7 @@
 
 Private Zyklus-App als installierbare PWA. Grundlage: [`docs/zyklus-app-prompt.md`](docs/zyklus-app-prompt.md) (im Prompt noch „Luna“, hier überall **aya** (kleingeschrieben)). Dieses Dokument hält fest, was gebaut wird, in welcher Reihenfolge und wo wir bewusst vom Prompt abweichen.
 
-Stand: 2026-10-16 · Phasen 0–4 (Setup, Engine, Crypto + Storage, Design-Grundlage, Onboarding + App-Sperre, Heute + Tagesprotokoll, Kalender, Insights, Einstellungen + Daten) abgeschlossen.
+Stand: 2026-10-16 · Phasen 0–4 (Setup, Engine, Crypto + Storage, Design-Grundlage, Onboarding + App-Sperre, Heute + Tagesprotokoll, Kalender, Insights, Einstellungen + Daten, PWA + Feinschliff) abgeschlossen. iPhone-Test steht aus (braucht HTTPS, also GitHub Pages).
 
 ---
 

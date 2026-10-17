@@ -114,6 +114,8 @@ export const de = {
     stressed: 'gestresst',
   },
   notes: {
+    backupNever:
+      'Du hast noch kein Backup. Ein Backup ist der einzige Weg, deine Daten auf ein neues Gerät mitzunehmen. Du findest es in den Einstellungen.',
     backup: 'Dein letztes Backup ist über 30 Tage alt. Ein aktuelles Backup ist der einzige Weg, deine Daten auf ein neues Gerät mitzunehmen.',
     late: (n: number) => (n === 1 ? 'Deine Periode ist 1 Tag später als erwartet. Das kommt oft vor.' : `Deine Periode ist ${n} Tage später als erwartet. Das kommt oft vor.`),
     pregnancyTest:

@@ -15,7 +15,7 @@ export default defineConfig({
       transformIndexHtml: (html) => html.replace("connect-src 'none'", "connect-src 'self' ws://localhost:*"),
     },
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       injectRegister: false,
       manifest: {
         name: 'aya',
@@ -24,9 +24,15 @@ export default defineConfig({
         start_url: './',
         scope: './',
         display: 'standalone',
-        background_color: '#faf6f4',
-        theme_color: '#faf6f4',
-        icons: [],
+        description: 'Private Zyklus-App. Alles bleibt verschlüsselt auf deinem Gerät.',
+        background_color: '#10152e',
+        theme_color: '#10152e',
+        orientation: 'portrait',
+        icons: [
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
       },
       workbox: {
         // App shell only. No runtime caching: the app never talks to the network.

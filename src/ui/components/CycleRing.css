@@ -27,7 +27,7 @@
 }
 .ring-range text {
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: var(--text-xs);
   fill: var(--period);
 }
 
