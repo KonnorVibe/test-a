@@ -10,7 +10,7 @@ import { useAutoLock, usePrivacyShield, useTheme } from './hooks/useAppEnvironme
 import { LockScreen } from './screens/LockScreen.tsx';
 import { Onboarding } from './screens/Onboarding.tsx';
 import { Calendar } from './screens/Calendar.tsx';
-import { Placeholder } from './screens/Placeholder.tsx';
+import { Insights } from './screens/Insights.tsx';
 import { Settings } from './screens/Settings.tsx';
 import { Today } from './screens/Today.tsx';
 import './theme/tokens.css';
@@ -72,7 +72,7 @@ export function App({ dbName }: { dbName?: string }) {
           onIncludeCycle={(c) => void includeCycle(c)}
         />
       )}
-      {tab === 'insights' && <Placeholder title={de.tabs.insights} />}
+      {tab === 'insights' && settings && <Insights logs={logs} settings={settings} today={today} />}
       {tab === 'settings' && <Settings />}
       <TabBar active={tab} onSelect={setTab} />
       {sheetDate && (
